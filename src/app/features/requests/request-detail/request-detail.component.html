@@ -1,0 +1,75 @@
+<app-header></app-header>
+
+<div class="request-detail-container">
+  <div class="request-detail-header">
+    <h1>{{ request.serviceType }}</h1>
+    <p class="subtitle">{{ request.employee }}</p>
+  </div>
+
+  <div class="detail-cards">
+    <div class="detail-card">
+      <h3>Request Info</h3>
+      <div class="info-row">
+        <span class="label">Request Number:</span>
+        <a class="value-link">{{ request.id }}</a>
+      </div>
+      <div class="info-row">
+        <span class="label">Employee:</span>
+        <a class="value-link">{{ request.employee }} <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="info-row">
+        <span class="label">Service Type:</span>
+        <span class="value">{{ request.serviceType }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Submission Date:</span>
+        <span class="value">{{ request.submissionDate }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Last Updated:</span>
+        <span class="value">{{ request.lastUpdated }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-text" [ngClass]="getStatusClass(request.status)">{{ request.status }}</span>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>Service Details</h3>
+      <div class="info-row">
+        <span class="label">Iqama Number:</span>
+        <span class="value">{{ request.serviceDetails.iqamaNumber }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Duration:</span>
+        <span class="value">{{ request.serviceDetails.duration }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Visa Type:</span>
+        <span class="value">{{ request.serviceDetails.visaType }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Visa Fees:</span>
+        <span class="value">{{ request.serviceDetails.visaFees }}</span>
+      </div>
+      <div class="info-row full-width">
+        <span class="label">Justification:</span>
+        <p class="value">{{ request.serviceDetails.justification }}</p>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>Update History</h3>
+      <div class="history-list">
+        @for (update of request.updateHistory; track update.date) {
+          <div class="history-item">
+            <div class="history-date">{{ update.date }}</div>
+            <div class="history-action">{{ update.action }}</div>
+            <div class="history-actor">{{ update.actor }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

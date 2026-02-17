@@ -1,0 +1,73 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Login</h1>
+      <div class="logo">
+        <h2>THIQATI EXC</h2>
+      </div>
+      <p class="login-message">You need to be logged in to view THIQATI EXC content.</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Employee email..."
+          class="form-control"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        />
+        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+          <span class="error-message">Please enter a valid email address</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Password..."
+          class="form-control"
+          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        />
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <span class="error-message">Password is required</span>
+        }
+      </div>
+
+      <div class="form-actions">
+        <a href="#" class="forgot-password">Forgot Password?</a>
+      </div>
+
+      @if (errorMessage) {
+        <div class="error-alert">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        {{ isLoading ? 'LOGGING IN...' : 'LOGIN' }}
+      </button>
+    </form>
+
+    <!-- Temporary Fake Login Button for Testing -->
+    <div class="fake-login-section">
+      <button
+        type="button"
+        class="fake-login-button"
+        (click)="fakeLogin()"
+        [disabled]="isLoading"
+      >
+        🚀 Quick Login (Fake)
+      </button>
+    </div>
+
+    <div class="support-info">
+      <p>Having trouble logging in? Contact Support</p>
+    </div>
+  </div>
+</div>

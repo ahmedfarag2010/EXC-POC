@@ -1,0 +1,55 @@
+<app-header></app-header>
+
+<div class="services-container">
+  <div class="services-header">
+    <h1>Service Catalog</h1>
+  </div>
+
+  <div class="services-content">
+    <aside class="categories-sidebar">
+      <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="filterType === 'All'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          All
+        </button>
+        <button class="filter-tab" [class.active]="filterType === 'Popular'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Popular
+        </button>
+      </div>
+
+      <ul class="categories-list">
+        @for (category of categories; track category) {
+          <li>
+            <button class="category-item" [class.active]="selectedCategory === category">
+              {{ category }}
+            </button>
+          </li>
+        }
+      </ul>
+    </aside>
+
+    <main class="services-main">
+      <h2>{{ filterType }} Services</h2>
+      <div class="services-grid">
+        @for (service of services; track service.id) {
+          <div class="service-card" [routerLink]="['/services', service.id]">
+            <div class="service-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H17.5C18.163 17 18.7989 17.2634 19.2678 17.7322C19.7366 18.2011 20 18.837 20 19.5C20 20.163 19.7366 20.7989 19.2678 21.2678C18.7989 21.7366 18.163 22 17.5 22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M7 17V7C7 6.46957 7.21071 5.96086 7.58579 5.58579C7.96086 5.21071 8.46957 5 9 5H15C15.5304 5 16.0391 5.21071 16.4142 5.58579C16.7893 5.96086 17 6.46957 17 7V17" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+          </div>
+        }
+      </div>
+    </main>
+  </div>
+</div>

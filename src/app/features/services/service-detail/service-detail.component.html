@@ -1,0 +1,81 @@
+<app-header></app-header>
+
+<div class="service-detail-container">
+  <div class="service-detail-header">
+    <h1>Request</h1>
+    <p class="subtitle">{{ service.category }}</p>
+  </div>
+
+  <div class="service-info">
+    <h2>{{ service.name }}</h2>
+    <p>{{ service.description }}</p>
+  </div>
+
+  <div class="request-form-card">
+    <form class="request-form">
+      <div class="form-group">
+        <label>Iqama Number</label>
+        <input type="text" placeholder="Enter iqama number" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label>Duration</label>
+        <select class="form-control">
+          <option>Select duration...</option>
+          <option>1 Month</option>
+          <option>3 Months</option>
+          <option>6 Months</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Visa Type</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="visaType" value="single" checked />
+            <span>Single</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="visaType" value="multiple" />
+            <span>Multiple</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Type</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="type" value="single" checked />
+            <span>Single Visa</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="type" value="family" />
+            <span>Family Visa</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Visa Fees?</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="visaFees" value="yes" checked />
+            <span>Yes</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="visaFees" value="no" />
+            <span>No</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Justification</label>
+        <textarea placeholder="Add visa justification..." class="form-control" rows="4"></textarea>
+      </div>
+
+      <button type="submit" class="submit-button">Place Request</button>
+    </form>
+  </div>
+</div>
