@@ -10,6 +10,8 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+/package-lock.json
+/yarn.lock
 
 # IDEs and editors
 .idea/
@@ -30,6 +32,7 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+.angular/
 .sass-cache/
 /connect.lock
 /coverage
@@ -40,3 +43,19 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Angular specific
+/e2e/test-output/
+/.angular-cli.json
+/.ng/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+/.env
