@@ -1,37 +1,44 @@
 <div class="login-container">
   <div class="login-card">
     <div class="login-header">
-      <h1>Login</h1>
+      <img src="/images/Logo.png" alt="THIQAH Logo" class="login-logo" />
       <div class="logo">
-        <h2>THIQATI EXC</h2>
+        <h2 class="logo-name">THIQATI </h2>
+        <h2 class="exc">EXC</h2>
       </div>
       <p class="login-message">You need to be logged in to view THIQATI EXC content.</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
       <div class="form-group">
-        <input
-          type="email"
-          formControlName="email"
-          placeholder="Employee email..."
-          class="form-control"
-          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-        />
+        <div class="input-with-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 0C5.383 0 0 5.383 0 12C0 18.617 5.383 24 12 24C18.617 24 24 18.617 24 12C24 5.383 18.617 0 12 0ZM8.52 20.299C8.627 18.464 10.139 17 12 17C13.861 17 15.373 18.464 15.48 20.299C14.409 20.75 13.233 21 12 21C10.767 21 9.591 20.75 8.52 20.299ZM18.188 18.518C17.348 15.901 14.892 14 12 14C9.108 14 6.652 15.901 5.812 18.518C4.085 16.877 3 14.565 3 12C3 7.037 7.038 3 12 3C16.962 3 21 7.037 21 12C21 14.565 19.916 16.877 18.188 18.518ZM15.499 8.5C15.499 10.433 13.932 12 11.999 12C10.066 12 8.499 10.433 8.499 8.5C8.499 6.567 10.066 5 11.999 5C13.932 5 15.499 6.567 15.499 8.5Z"
+              fill="#9FA0A4" />
+          </svg>
+          <input type="email" formControlName="email" placeholder="Employee email..." class="form-control"
+            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
+        </div>
+
         @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-          <span class="error-message">Please enter a valid email address</span>
+        <span class="error-message">Please enter a valid email address</span>
         }
       </div>
 
       <div class="form-group">
-        <input
-          type="password"
-          formControlName="password"
-          placeholder="Password..."
-          class="form-control"
-          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-        />
+        <div class="input-with-icon">
+          <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M14.4991 8.00105H5.99961V7.22809C6.00004 4.89316 7.89319 3.0007 10.2281 3.00112C11.7655 3.0014 13.1815 3.83619 13.9261 5.18119C14.3281 5.90545 15.2412 6.16667 15.9654 5.76465C16.6897 5.36263 16.9509 4.44956 16.5489 3.72529C14.614 0.233989 10.2151 -1.02766 6.72383 0.907258C4.42598 2.18077 3.00009 4.60091 2.99981 7.22809V8.608C1.16074 9.54651 0.00224986 11.436 0 13.5007V18.5004C0.00332791 21.5364 2.46364 23.9967 5.49963 24H14.4991C17.535 23.9967 19.9954 21.5364 19.9987 18.5004V13.5007C19.9954 10.4647 17.5351 8.00438 14.4991 8.00105ZM16.9989 18.5004C16.9989 19.881 15.8797 21.0002 14.4991 21.0002H5.49968C4.11906 21.0002 2.99985 19.881 2.99985 18.5004V13.5007C2.99985 12.1201 4.11906 11.0009 5.49968 11.0009H14.4991C15.8797 11.0009 16.9989 12.1201 16.9989 13.5007V18.5004Z"
+              fill="#9FA0A4" />
+          </svg>
+          <input type="password" formControlName="password" placeholder="Password..." class="form-control"
+            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
+        </div>
+
         @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-          <span class="error-message">Password is required</span>
+        <span class="error-message">Password is required</span>
         }
       </div>
 
@@ -40,34 +47,29 @@
       </div>
 
       @if (errorMessage) {
-        <div class="error-alert">
-          {{ errorMessage }}
-        </div>
+      <div class="error-alert">
+        {{ errorMessage }}
+      </div>
       }
 
-      <button
-        type="submit"
-        class="login-button"
-        [disabled]="loginForm.invalid || isLoading"
-      >
+      <button type="submit" class="login-button" [disabled]="loginForm.invalid || isLoading">
         {{ isLoading ? 'LOGGING IN...' : 'LOGIN' }}
       </button>
     </form>
 
     <!-- Temporary Fake Login Button for Testing -->
-    <div class="fake-login-section">
-      <button
-        type="button"
-        class="fake-login-button"
-        (click)="fakeLogin()"
-        [disabled]="isLoading"
-      >
+    <!-- <div class="fake-login-section">
+      <button type="button" class="fake-login-button" (click)="fakeLogin()" [disabled]="isLoading">
         🚀 Quick Login (Fake)
       </button>
-    </div>
+    </div> -->
 
+    <div class="divider">
+      <span></span>
+    </div>
     <div class="support-info">
-      <p>Having trouble logging in? Contact Support</p>
+      <p>Having trouble logging in? </p>
+      <p class="contact-support">Contact Supportt </p>
     </div>
   </div>
 </div>
