@@ -1,12 +1,17 @@
 .request-detail-container {
   min-height: calc(100vh - 70px);
-  background: #f5f5f5;
+  background: radial-gradient(100% 239.32% at 0% 100%, #ffffff 0%, #daecf8 100%);
   padding: 30px 20px;
+  font-family: "Google Sans", sans-serif;
 }
 
 .request-detail-header {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto 30px;
+  text-align: center;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.5) 100%);
+  padding: 45px 0px;
+  border-radius: 100px;
 
   h1 {
     font-size: 28px;
@@ -30,23 +35,24 @@
 }
 
 .detail-card {
-  background: white;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 40px;
+  padding: 30px;
+  box-shadow: 0px 4px 20px 0px rgba(66, 65, 70, 0.05);
 
   h3 {
-    font-size: 20px;
-    color: #333;
+    font-size: 21px;
+    color: rgba(66, 65, 70, 1);
     margin-bottom: 20px;
     padding-bottom: 12px;
     border-bottom: 2px solid #e0e0e0;
+    font-weight: 100;
   }
 
   .info-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 2rem;
     align-items: flex-start;
 
     &.full-width {
@@ -55,9 +61,9 @@
     }
 
     .label {
-      color: #666;
+      color: rgba(66, 65, 70, 1);
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .value {
@@ -67,7 +73,7 @@
     }
 
     .value-link {
-      color: #2196F3;
+      color: #2196f3;
       text-decoration: none;
       font-size: 14px;
       display: flex;

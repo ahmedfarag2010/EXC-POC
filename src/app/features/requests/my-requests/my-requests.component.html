@@ -2,7 +2,7 @@
 
 <div class="requests-container">
   <div class="requests-header">
-    <h1>Your Requests</h1>
+    <h1>&nbsp;</h1>
   </div>
 
   @if (errorMessage) {
@@ -34,7 +34,7 @@
           </thead>
           <tbody>
             @for (request of requests; track request.id) {
-              <tr [routerLink]="['/my-requests', request.id]">
+              <tr [routerLink]="['/my-requests', request.id]" class="table-row">
                 <td>
                   <a class="request-link">{{ request.id }}</a>
                 </td>

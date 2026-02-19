@@ -2,7 +2,7 @@
 
 <div class="tasks-container">
   <div class="tasks-header">
-    <h1>My Tasks</h1>
+    <h1>&nbsp;</h1>
   </div>
 
   @if (errorMessage) {
@@ -36,7 +36,7 @@
           </thead>
           <tbody>
             @for (task of tasks; track task.id) {
-              <tr>
+              <tr class="table-row">
                 <td>
                   <a [routerLink]="['/my-tasks', task.id]" class="task-link">{{ task.id }}</a>
                 </td>
