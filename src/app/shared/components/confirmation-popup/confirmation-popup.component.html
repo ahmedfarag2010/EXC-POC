@@ -1,0 +1,24 @@
+<!-- confirmation-popup.component.html -->
+<div class="popup-overlay" *ngIf="visible" (click)="close()">
+  <div class="popup-card" (click)="$event.stopPropagation()">
+
+    <!-- request sent panel with green check -->
+    <div class="request-panel">
+      <div class="sent-title">
+        <div class="check-circle" aria-hidden="true">
+          <img src="/images/correct.png" alt="Checkmark Icon" class="check-icon" width="160px" height="141px" />
+        </div>
+        <h2>Request Sent!</h2>
+      </div>
+      <div class="thank-msg">
+        <p class="line1">Thank you for submitting your request. It’s now been processed and a ticket has been created.
+          You can track the progress of your request, along with any updates, on your Requests page.</p>
+      </div>
+    </div>
+    <!-- two bottom buttons: Home / Your Requests (no close, just model) -->
+    <div class="bottom-actions">
+      <div class="btn-home">Home</div>
+      <div class="btn-requests">Your Requests</div>
+    </div>
+  </div>
+</div>

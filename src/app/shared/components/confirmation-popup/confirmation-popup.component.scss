@@ -1,0 +1,213 @@
+/* confirmation-popup.component.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 20, 30, 0.5); /* semi-transparent dark */
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+  font-family:
+    "Segoe UI",
+    Roboto,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    sans-serif;
+}
+
+/* THE MODAL/POPUP CARD */
+.popup-card {
+  max-width: 730px;
+  width: 100%;
+  background-image: url(/images/modal.png);
+  border-radius: 32px;
+  box-shadow:
+    0 30px 45px -12px rgba(0, 35, 45, 0.4),
+    0 10px 20px -8px rgba(0, 0, 0, 0.3);
+  padding: 2.2rem 2rem 2rem 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  animation: popup-appear 0.2s ease-out;
+}
+
+@keyframes popup-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* HEADER – exactly "AHAD Exit Re-Entry Visa" (two visual lines) */
+.header-block {
+  margin-bottom: 1.8rem;
+}
+.header-block .ahad {
+  display: block;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #0d3a47;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.header-block .exit-visa {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 450;
+  color: #2d6577;
+  border-left: 4px solid #3f9ebd;
+  padding-left: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+/* request sent panel (greenish highlight) */
+.request-panel {
+  padding: 1.8rem 1.8rem 1.5rem 1.8rem;
+  margin: 1.5rem 0 1.8rem 0;
+}
+
+.sent-title {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+  flex-direction: column;
+}
+.check-circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: 600;
+}
+.sent-title h2 {
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: #0b604b;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* text block — verbatim from description */
+.thank-msg {
+  font-size: 1.1rem;
+  color: #194755;
+}
+.thank-msg p {
+  margin-bottom: 0.5rem;
+  color: rgba(125, 126, 130, 1);
+  text-align: center;
+}
+.thank-msg .line1 {
+  font-weight: 450;
+}
+.thank-msg .line2 {
+  font-weight: 460;
+  margin-bottom: 0.25rem;
+}
+.ticket-chip {
+  display: inline-block;
+  background: #d1e9f2;
+  border-radius: 40px;
+  padding: 0.2rem 1.2rem 0.2rem 1rem;
+  font-weight: 520;
+  color: #0b6073;
+  border: 1px solid #aad0df;
+  font-size: 1rem;
+  margin-top: 0.1rem;
+}
+
+/* track request section */
+.track-section {
+  background: white;
+  border-radius: 20px;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid #b8d6e4;
+  margin: 1.4rem 0 2rem 0;
+  box-shadow:
+    inset 0 1px 4px #ffffff,
+    0 4px 8px -10px #0f3f4d;
+  font-size: 1.05rem;
+}
+.track-section strong {
+  font-weight: 600;
+  color: #094c5e;
+}
+.track-section .requests-link {
+  color: #157394;
+  font-weight: 540;
+  text-decoration: none;
+  border-bottom: 1.5px dotted #7bb7cd;
+  cursor: default;
+}
+.track-section .requests-link:hover {
+  border-bottom: 2px solid #0a637b;
+}
+
+/* two bottom buttons exactly as given: Home / Your Requests */
+.bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.btn-home,
+.btn-requests {
+  border: none;
+  background: none;
+  font-size: 1.3rem;
+  font-weight: 530;
+  padding: 0.7rem 1.8rem;
+  border-radius: 60px;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 260px;
+  cursor: default; /* model only — not interactive */
+  letter-spacing: 0.01em;
+}
+
+.btn-home {
+  background: rgba(255, 255, 255, 0.5);
+  color: #165f77;
+  box-shadow: 0px 4px 40px 0px rgba(66, 65, 70, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.btn-requests {
+  background: linear-gradient(90deg, rgba(106, 109, 160, 0.9) 0%, rgba(211, 212, 227, 0.9) 100%);
+  color: white;
+  box-shadow: 0 8px 14px -10px #094c5e;
+}
+
+/* mobile fit */
+@media (max-width: 450px) {
+  .popup-card {
+    padding: 1.5rem;
+  }
+  .btn-home,
+  .btn-requests {
+    min-width: 130px;
+    font-size: 1.2rem;
+  }
+}
