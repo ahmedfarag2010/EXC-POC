@@ -2,32 +2,40 @@
 
 <div class="task-detail-container">
   <div class="task-detail-header">
-    <h1>{{ task.serviceType }}</h1>
-    <p class="subtitle">{{ task.employee }}</p>
+    <div class="title">
+      <h1>{{ task.serviceType }}</h1>
+      <p class="subtitle">{{ task.employee }}</p>
+    </div>
+    <div class="task-actions">
+      <button class="action-button reject" (click)="rejectTask()">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M9.80617 8.33332L16.3615 1.77873C16.7684 1.37181 16.7684 0.712073 16.3615 0.305188C15.9546 -0.101729 15.2948 -0.101729 14.8879 0.305188L8.33332 6.86046L1.77873 0.305188C1.37181 -0.101729 0.712073 -0.101729 0.305188 0.305188C-0.101697 0.712105 -0.101729 1.37184 0.305188 1.77873L6.86046 8.33332L0.305188 14.8879C-0.101729 15.2949 -0.101729 15.9546 0.305188 16.3615C0.712105 16.7684 1.37184 16.7684 1.77873 16.3615L8.33332 9.80617L14.8879 16.3615C15.2948 16.7684 15.9546 16.7684 16.3614 16.3615C16.7684 15.9546 16.7684 15.2948 16.3614 14.8879L9.80617 8.33332Z"
+            fill="#E66360" />
+        </svg>
+        REJECT
+      </button>
+      <button class="action-button delegate" (click)="delegateTask()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M14.5831 0C11.5914 0 9.16641 2.425 9.16641 5.41667C9.16641 8.40833 11.5914 10.8333 14.5831 10.8333C17.5747 10.8333 19.9997 8.40833 19.9997 5.41667C19.9997 2.425 17.5747 0 14.5831 0ZM18.0972 5.9875L15.5447 8.54C15.0364 9.04833 14.1672 8.68833 14.1672 7.96917V6.66667H12.0831C11.3931 6.66667 10.8331 6.1075 10.8331 5.41667C10.8331 4.72583 11.3931 4.16667 12.0831 4.16667H14.1672V2.86417C14.1672 2.145 15.0364 1.785 15.5447 2.29333L18.0972 4.84583C18.4122 5.16083 18.4122 5.6725 18.0972 5.9875ZM10.7106 18.2125C11.0081 18.8358 10.7439 19.5817 10.1206 19.8783C9.51224 20.1733 8.75224 19.9175 8.45474 19.2883C7.93641 18.2017 6.74391 17.5 5.41641 17.5C4.08891 17.5 2.89641 18.2017 2.37808 19.2883C2.08141 19.9108 1.33391 20.175 0.712243 19.8783C0.0889099 19.5817 -0.175257 18.8358 0.122243 18.2125C1.05224 16.2608 3.13058 15.0008 5.41724 15.0008C7.70391 15.0008 9.78141 16.2617 10.7122 18.2125H10.7106ZM2.08308 10C2.08308 8.15917 3.57558 6.66667 5.41641 6.66667C7.25724 6.66667 8.74974 8.15917 8.74974 10C8.74974 11.8408 7.25724 13.3333 5.41641 13.3333C3.57558 13.3333 2.08308 11.8408 2.08308 10Z"
+            fill="#6A6DA0" />
+        </svg>
+        DELEGATE
+      </button>
+      <button class="action-button approve" (click)="approveTask()">
+        <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M6.45766 14.4377C5.88994 14.4379 5.34547 14.2123 4.94438 13.8105L0.369217 9.23705C-0.123072 8.74461 -0.123072 7.94635 0.369217 7.4539C0.861665 6.96161 1.65992 6.96161 2.15237 7.4539L6.45766 11.7592L17.8476 0.369217C18.3401 -0.123072 19.1383 -0.123072 19.6308 0.369217C20.1231 0.861665 20.1231 1.65992 19.6308 2.15237L7.97094 13.8105C7.56984 14.2123 7.02538 14.4379 6.45766 14.4377Z"
+            fill="white" />
+        </svg>
+        APPROVE
+      </button>
+    </div>
+
   </div>
 
-  <div class="task-actions">
-    <button class="action-button reject" (click)="rejectTask()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      REJECT
-    </button>
-    <button class="action-button delegate" (click)="delegateTask()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2"/>
-        <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="2"/>
-      </svg>
-      DELEGATE
-    </button>
-    <button class="action-button approve" (click)="approveTask()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      APPROVE
-    </button>
-  </div>
+
 
   <div class="detail-cards">
     <div class="detail-card">
@@ -38,7 +46,10 @@
       </div>
       <div class="info-row">
         <span class="label">Employee:</span>
-        <a class="value-link">{{ task.employee }} <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="value-link">{{ task.employee }} <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg></a>
       </div>
       <div class="info-row">
         <span class="label">Service Type:</span>
@@ -86,11 +97,11 @@
       <h3>Update History</h3>
       <div class="history-list">
         @for (update of task.updateHistory; track update.date) {
-          <div class="history-item">
-            <div class="history-date">{{ update.date }}</div>
-            <div class="history-action">{{ update.action }}</div>
-            <div class="history-actor">{{ update.actor }}</div>
-          </div>
+        <div class="history-item">
+          <div class="history-date">{{ update.date }}</div>
+          <div class="history-action">{{ update.action }}</div>
+          <div class="history-actor">{{ update.actor }}</div>
+        </div>
         }
       </div>
     </div>
