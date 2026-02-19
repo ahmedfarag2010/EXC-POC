@@ -2,7 +2,7 @@
 
 <div class="tasks-container">
   <div class="tasks-header">
-    <h1>My Tasks</h1>
+    <h1>&nbsp;</h1>
   </div>
 
   <div class="tasks-table-container">
@@ -20,40 +20,46 @@
       </thead>
       <tbody>
         @for (task of tasks; track task.id) {
-          <tr>
-            <td>
-              <a [routerLink]="['/my-tasks', task.id]" class="task-link">{{ task.id }}</a>
-            </td>
-            <td>{{ task.employee }}</td>
-            <td>{{ task.serviceType }}</td>
-            <td>{{ task.submissionDate }}</td>
-            <td>{{ task.lastUpdated }}</td>
-            <td>
-              <span class="status-badge" [ngClass]="getStatusClass(task.status)">
-                {{ task.status }}
-              </span>
-            </td>
-            <td>
-              <div class="action-buttons">
-                <button class="action-btn approve" (click)="approveTask(task.id)" title="Approve">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-                <button class="action-btn reject" (click)="rejectTask(task.id)" title="Reject">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-                <button class="action-btn view" [routerLink]="['/my-tasks', task.id]" title="View Details">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/>
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                </button>
-              </div>
-            </td>
-          </tr>
+        <tr class="table-row">
+          <td>
+            <a [routerLink]="['/my-tasks', task.id]" class="task-link">{{ task.id }}</a>
+          </td>
+          <td>{{ task.employee }}</td>
+          <td>{{ task.serviceType }}</td>
+          <td>{{ task.submissionDate }}</td>
+          <td>{{ task.lastUpdated }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(task.status)">
+              {{ task.status }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn approve" (click)="approveTask(task.id)" title="Approve">
+                <svg width="52" height="36" viewBox="0 0 52 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="52" height="36" rx="18" fill="#DDEEE8" />
+                  <path
+                    d="M22.4577 25.219C21.8899 25.2192 21.3455 24.9935 20.9444 24.5918L16.3692 20.0183C15.8769 19.5259 15.8769 18.7276 16.3692 18.2352C16.8617 17.7429 17.6599 17.7429 18.1524 18.2352L22.4577 22.5404L33.8476 11.1505C34.3401 10.6582 35.1383 10.6582 35.6308 11.1505C36.1231 11.6429 36.1231 12.4412 35.6308 12.9336L23.9709 24.5918C23.5698 24.9935 23.0254 25.2192 22.4577 25.219Z"
+                    fill="#66C0A6" />
+                </svg>
+              </button>
+              <button class="action-btn reject" (click)="rejectTask(task.id)" title="Reject">
+                <svg width="52" height="36" viewBox="0 0 52 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="52" height="36" rx="18" fill="#EEF8FD" />
+                  <path
+                    d="M27.4727 17.9998L34.028 11.4452C34.4349 11.0383 34.4349 10.3786 34.028 9.97169C33.6211 9.56477 32.9613 9.56477 32.5544 9.97169L25.9998 16.527L19.4452 9.97169C19.0383 9.56477 18.3786 9.56477 17.9717 9.97169C17.5648 10.3786 17.5648 11.0383 17.9717 11.4452L24.527 17.9998L17.9717 24.5544C17.5648 24.9614 17.5648 25.6211 17.9717 26.028C18.3786 26.4349 19.0383 26.4349 19.4452 26.028L25.9998 19.4727L32.5544 26.028C32.9613 26.4349 33.6211 26.4349 34.028 26.028C34.4349 25.6211 34.4349 24.9613 34.028 24.5544L27.4727 17.9998Z"
+                    fill="#9FA0A4" />
+                </svg>
+              </button>
+              <button class="action-btn view" [routerLink]="['/my-tasks', task.id]" title="View Details">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" />
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
         }
       </tbody>
     </table>
