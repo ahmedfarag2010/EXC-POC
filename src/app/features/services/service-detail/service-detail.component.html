@@ -1,65 +1,96 @@
 <app-header></app-header>
 
 <div class="service-detail-container">
+  <div class="service-detail-header">
+    <h1>Request</h1>
+    <p class="subtitle">{{ service.category }}</p>
+  </div>
 
   <div class="service-info">
-    <h2>&nbsp;</h2>
+    <h2>{{ service.name }}</h2>
+    <p>{{ service.description }}</p>
   </div>
 
   <div class="request-form-card">
-    <form class="request-form">
+    <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="request-form">
+      @if (errorMessage) {
+        <div class="error-alert">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="success-alert">
+          {{ successMessage }}
+        </div>
+      }
+
       <div class="form-group">
-        <label>Iqama Number</label>
-        <input type="text" placeholder="Enter iqama number" class="form-control" />
+        <label>Iqama Number *</label>
+        <input 
+          type="text" 
+          formControlName="iqamaNumber"
+          placeholder="Enter iqama number" 
+          class="form-control"
+          [class.error]="requestForm.get('iqamaNumber')?.invalid && requestForm.get('iqamaNumber')?.touched"
+        />
+        @if (requestForm.get('iqamaNumber')?.invalid && requestForm.get('iqamaNumber')?.touched) {
+          <span class="error-message">Iqama number is required and must contain only numbers</span>
+        }
       </div>
 
       <div class="form-group">
-        <label>Duration</label>
-        <select class="form-control">
-          <option>Select duration...</option>
-          <option>1 Month</option>
-          <option>3 Months</option>
-          <option>6 Months</option>
+        <label>Duration *</label>
+        <select formControlName="duration" class="form-control" [class.error]="requestForm.get('duration')?.invalid && requestForm.get('duration')?.touched">
+          <option value="">Select duration...</option>
+          <option [value]="1">1 Month</option>
+          <option [value]="2">2 Months</option>
+          <option [value]="3">3 Months</option>
+          <option [value]="4">4 Months</option>
+          <option [value]="5">5 Months</option>
         </select>
+        @if (requestForm.get('duration')?.invalid && requestForm.get('duration')?.touched) {
+          <span class="error-message">Duration is required</span>
+        }
       </div>
 
       <div class="form-group">
-        <label>Visa Type</label>
+        <label>Visa Type *</label>
         <div class="radio-group">
           <label class="radio-option">
-            <input type="radio" name="visaType" value="single" checked />
+            <input type="radio" formControlName="visaType" [value]="1" />
             <span>Single</span>
           </label>
           <label class="radio-option">
-            <input type="radio" name="visaType" value="multiple" />
+            <input type="radio" formControlName="visaType" [value]="2" />
             <span>Multiple</span>
           </label>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Type</label>
+        <label>Type *</label>
         <div class="radio-group">
           <label class="radio-option">
-            <input type="radio" name="type" value="single" checked />
+            <input type="radio" formControlName="type" [value]="1" />
             <span>Single Visa</span>
           </label>
           <label class="radio-option">
-            <input type="radio" name="type" value="family" />
+            <input type="radio" formControlName="type" [value]="2" />
             <span>Family Visa</span>
           </label>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Visa Fees?</label>
+        <label>Visa Fees? *</label>
         <div class="radio-group">
           <label class="radio-option">
-            <input type="radio" name="visaFees" value="yes" checked />
+            <input type="radio" formControlName="visaFees" [value]="true" />
             <span>Yes</span>
           </label>
           <label class="radio-option">
-            <input type="radio" name="visaFees" value="no" />
+            <input type="radio" formControlName="visaFees" [value]="false" />
             <span>No</span>
           </label>
         </div>
@@ -67,10 +98,21 @@
 
       <div class="form-group">
         <label>Justification</label>
-        <textarea placeholder="Add visa justification..." class="form-control" rows="4"></textarea>
+        <textarea 
+          formControlName="justification"
+          placeholder="Add visa justification..." 
+          class="form-control" 
+          rows="4"
+        ></textarea>
       </div>
 
-      <button type="submit" class="submit-button">Place Request</button>
+      <button 
+        type="submit" 
+        class="submit-button"
+        [disabled]="requestForm.invalid || isLoading"
+      >
+        {{ isLoading ? 'Submitting...' : 'Place Request' }}
+      </button>
     </form>
   </div>
 </div>

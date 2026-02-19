@@ -1,98 +1,138 @@
 <app-header></app-header>
 
 <div class="task-detail-container">
-  <div class="task-detail-header">
-    <h1>{{ task.serviceType }}</h1>
-    <p class="subtitle">{{ task.employee }}</p>
-  </div>
+  @if (errorMessage && !isLoading) {
+    <div class="error-alert">
+      {{ errorMessage }}
+    </div>
+  }
 
-  <div class="task-actions">
-    <button class="action-button reject" (click)="rejectTask()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      REJECT
-    </button>
-    <button class="action-button delegate" (click)="delegateTask()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2"/>
-        <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="2"/>
-      </svg>
-      DELEGATE
-    </button>
-    <button class="action-button approve" (click)="approveTask()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      APPROVE
-    </button>
-  </div>
+  @if (successMessage) {
+    <div class="success-alert">
+      {{ successMessage }}
+    </div>
+  }
 
-  <div class="detail-cards">
-    <div class="detail-card">
-      <h3>Request Info</h3>
-      <div class="info-row">
-        <span class="label">Request Number:</span>
-        <a class="value-link">{{ task.id }}</a>
-      </div>
-      <div class="info-row">
-        <span class="label">Employee:</span>
-        <a class="value-link">{{ task.employee }} <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-      <div class="info-row">
-        <span class="label">Service Type:</span>
-        <span class="value">{{ task.serviceType }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Submission Date:</span>
-        <span class="value">{{ task.submissionDate }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Last Updated:</span>
-        <span class="value">{{ task.lastUpdated }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Status:</span>
-        <span class="status-text" [ngClass]="getStatusClass(task.status)">{{ task.status }}</span>
-      </div>
+  @if (isLoading) {
+    <div class="loading-message">
+      Loading task details...
+    </div>
+  } @else if (task) {
+    <div class="task-detail-header">
+      <h1>{{ task.serviceType || 'Task Details' }}</h1>
+      <p class="subtitle">{{ task.employee || 'N/A' }}</p>
     </div>
 
-    <div class="detail-card">
-      <h3>Service Details</h3>
-      <div class="info-row">
-        <span class="label">Iqama Number:</span>
-        <span class="value">{{ task.serviceDetails.iqamaNumber }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Duration:</span>
-        <span class="value">{{ task.serviceDetails.duration }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Visa Type:</span>
-        <span class="value">{{ task.serviceDetails.visaType }}</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Visa Fees:</span>
-        <span class="value">{{ task.serviceDetails.visaFees }}</span>
-      </div>
-      <div class="info-row full-width">
-        <span class="label">Justification:</span>
-        <p class="value">{{ task.serviceDetails.justification }}</p>
-      </div>
+    <div class="task-actions">
+      <button 
+        class="action-button reject" 
+        (click)="rejectTask()"
+        [disabled]="isSubmitting"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{ isSubmitting ? 'SUBMITTING...' : 'REJECT' }}
+      </button>
+      <button 
+        class="action-button delegate" 
+        (click)="delegateTask()"
+        [disabled]="isSubmitting"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        DELEGATE
+      </button>
+      <button 
+        class="action-button approve" 
+        (click)="approveTask()"
+        [disabled]="isSubmitting"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{ isSubmitting ? 'SUBMITTING...' : 'APPROVE' }}
+      </button>
     </div>
 
-    <div class="detail-card">
-      <h3>Update History</h3>
-      <div class="history-list">
-        @for (update of task.updateHistory; track update.date) {
-          <div class="history-item">
-            <div class="history-date">{{ update.date }}</div>
-            <div class="history-action">{{ update.action }}</div>
-            <div class="history-actor">{{ update.actor }}</div>
+    <div class="detail-cards">
+      <div class="detail-card">
+        <h3>Request Info</h3>
+        <div class="info-row">
+          <span class="label">Request Number:</span>
+          <a class="value-link">{{ task.id || task.requestId || 'N/A' }}</a>
+        </div>
+        <div class="info-row">
+          <span class="label">Employee:</span>
+          <a class="value-link">{{ task.employee || 'N/A' }} <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="info-row">
+          <span class="label">Service Type:</span>
+          <span class="value">{{ task.serviceType || 'N/A' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Submission Date:</span>
+          <span class="value">{{ task.submissionDate || 'N/A' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Last Updated:</span>
+          <span class="value">{{ task.lastUpdated || 'N/A' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Status:</span>
+          <span class="status-text" [ngClass]="getStatusClass(task.status)">{{ getStatusDisplay(task.status) }}</span>
+        </div>
+      </div>
+
+      @if (task.serviceDetails) {
+        <div class="detail-card">
+          <h3>Service Details</h3>
+          <div class="info-row">
+            <span class="label">Iqama Number:</span>
+            <span class="value">{{ task.serviceDetails.iqamaNumber || 'N/A' }}</span>
           </div>
-        }
-      </div>
+          <div class="info-row">
+            <span class="label">Duration:</span>
+            <span class="value">{{ task.serviceDetails.duration || 'N/A' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Visa Type:</span>
+            <span class="value">{{ task.serviceDetails.visaType || 'N/A' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Visa Fees:</span>
+            <span class="value">{{ task.serviceDetails.visaFees !== undefined ? (task.serviceDetails.visaFees ? 'Yes' : 'No') : 'N/A' }}</span>
+          </div>
+          @if (task.serviceDetails.justification) {
+            <div class="info-row full-width">
+              <span class="label">Justification:</span>
+              <p class="value">{{ task.serviceDetails.justification }}</p>
+            </div>
+          }
+        </div>
+      }
+
+      @if ($any(task).updateHistory && $any(task).updateHistory.length > 0) {
+        <div class="detail-card">
+          <h3>Update History</h3>
+          <div class="history-list">
+            @for (update of $any(task).updateHistory; track update.date) {
+              <div class="history-item">
+                <div class="history-date">{{ update.date }}</div>
+                <div class="history-action">{{ update.action }}</div>
+                <div class="history-actor">{{ update.actor }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      }
     </div>
-  </div>
+  } @else if (!isLoading) {
+    <div class="empty-state">
+      <p>Task not found.</p>
+    </div>
+  }
 </div>

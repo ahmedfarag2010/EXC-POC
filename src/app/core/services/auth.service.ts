@@ -1,7 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { API_CONFIG } from '../config/api.config';
+import { LoginDto, LoginResponse, RegisterDto, User } from '../models/auth.models';
 
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'user_data';
@@ -11,6 +14,7 @@ const USER_KEY = 'user_data';
 })
 export class AuthService {
   private router = inject(Router);
+  private http = inject(HttpClient);
 
   /**
    * Login user and store token in localStorage
@@ -18,29 +22,52 @@ export class AuthService {
    * @param password User password
    * @returns Observable with login response
    */
-  login(email: string, password: string): Observable<{ token: string; user: any }> {
-    // TODO: Replace with actual API call
-    // For now, simulate API response
-    console.log('🔐 [AUTH SERVICE] Fake login initiated:', { email, password });
-    
-    const mockResponse = {
-      token: 'mock_jwt_token_' + Date.now(),
-      user: {
-        id: 1,
-        email: email,
-        name: email.split('@')[0]
-      }
-    };
+  login(email: string, password: string): Observable<LoginResponse> {
+    const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.auth.login}`;
+    const loginDto: LoginDto = { email, password };
 
-    console.log('✅ [AUTH SERVICE] Mock response generated:', mockResponse);
+    console.log('🔐 [AUTH SERVICE] Login initiated:', { email, url });
 
-    return of(mockResponse).pipe(
+    return this.http.post<any>(url, loginDto).pipe(
+      map((response: any) => {
+        // Map API response to LoginResponse format
+        // Adjust this based on actual API response structure
+        const loginResponse: LoginResponse = {
+          token: response.token || response.accessToken || response.jwtToken || '',
+          user: response.user || {
+            id: response.userId || response.id || '',
+            email: email,
+            fullName: response.fullName || response.name || email.split('@')[0]
+          }
+        };
+
+        console.log('✅ [AUTH SERVICE] Login successful:', loginResponse);
+        return loginResponse;
+      }),
       tap(response => {
         console.log('💾 [AUTH SERVICE] Storing token and user data');
         this.setToken(response.token);
         this.setUser(response.user);
         console.log('✅ [AUTH SERVICE] Token stored:', this.getToken());
         console.log('✅ [AUTH SERVICE] User stored:', this.getUser());
+      }),
+      catchError(error => {
+        console.error('❌ [AUTH SERVICE] Login failed:', error);
+        return throwError(() => new Error(error.error?.message || 'Login failed. Please check your credentials.'));
+      })
+    );
+  }
+
+  /**
+   * Register new user
+   */
+  register(registerDto: RegisterDto): Observable<any> {
+    const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.auth.register}`;
+    console.log('📝 [AUTH SERVICE] Register initiated:', registerDto);
+    return this.http.post(url, registerDto).pipe(
+      catchError(error => {
+        console.error('❌ [AUTH SERVICE] Registration failed:', error);
+        return throwError(() => new Error(error.error?.message || 'Registration failed.'));
       })
     );
   }

@@ -5,34 +5,52 @@
     <h1>Your Requests</h1>
   </div>
 
-  <div class="requests-table-container">
-    <table class="requests-table">
-      <thead>
-        <tr>
-          <th>Request #</th>
-          <th>Service Type</th>
-          <th>Submission Date</th>
-          <th>Last Updated</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (request of requests; track request.id) {
-          <tr [routerLink]="['/my-requests', request.id]">
-            <td>
-              <a class="request-link">{{ request.id }}</a>
-            </td>
-            <td>{{ request.serviceType }}</td>
-            <td>{{ request.submissionDate }}</td>
-            <td>{{ request.lastUpdated }}</td>
-            <td>
-              <span class="status-badge" [ngClass]="getStatusClass(request.status)">
-                {{ request.status }}
-              </span>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+  @if (errorMessage) {
+    <div class="error-alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="loading-message">
+      Loading requests...
+    </div>
+  } @else {
+    <div class="requests-table-container">
+      @if (requests.length === 0) {
+        <div class="empty-state">
+          <p>No requests found.</p>
+        </div>
+      } @else {
+        <table class="requests-table">
+          <thead>
+            <tr>
+              <th>Request #</th>
+              <th>Service Type</th>
+              <th>Submission Date</th>
+              <th>Last Updated</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (request of requests; track request.id) {
+              <tr [routerLink]="['/my-requests', request.id]">
+                <td>
+                  <a class="request-link">{{ request.id }}</a>
+                </td>
+                <td>{{ request.serviceType || 'N/A' }}</td>
+                <td>{{ request.submissionDate || 'N/A' }}</td>
+                <td>{{ request.lastUpdated || 'N/A' }}</td>
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+                    {{ getStatusDisplay(request.status) }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
 </div>
