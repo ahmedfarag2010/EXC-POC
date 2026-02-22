@@ -6,6 +6,7 @@ import { ServicesRoutingModule } from './services-routing.module';
 import { ServicesListComponent } from './services-list/services-list.component';
 import { ServiceDetailComponent } from './service-detail/service-detail.component';
 import { HeaderComponent } from '../../shared/layout/header/header.component';
+import { ConfirmationPopupComponent } from '../../shared/components/confirmation-popup/confirmation-popup.component';
 
 @NgModule({
   declarations: [],
@@ -15,7 +16,8 @@ import { HeaderComponent } from '../../shared/layout/header/header.component';
     ServicesRoutingModule,
     ServicesListComponent,
     ServiceDetailComponent,
-    HeaderComponent
-  ]
+    HeaderComponent,
+    ConfirmationPopupComponent,
+  ],
 })
-export class ServicesModule { }
+export class ServicesModule {}

@@ -6,12 +6,19 @@ import { HeaderComponent } from '../../../shared/layout/header/header.component'
 import { RequestsService } from '../../../core/services/requests.service';
 import { LookupsService } from '../../../core/services/lookups.service';
 import { CreateRequestDto, VisaType, VisaRequestType, Duration } from '../../../core/models/request.models';
+import { ConfirmationPopupComponent } from '../../../shared/components/confirmation-popup/confirmation-popup.component';
 
 @Component({
   selector: 'app-service-detail',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, HeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    HeaderComponent,
+    ConfirmationPopupComponent,
+  ],
   templateUrl: './service-detail.component.html',
-  styleUrl: './service-detail.component.scss'
+  styleUrl: './service-detail.component.scss',
 })
 export class ServiceDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -21,11 +28,14 @@ export class ServiceDetailComponent implements OnInit {
   private fb = inject(FormBuilder);
 
   serviceId: string | null = null;
+  showPopup = false;
+
   service = {
     id: 1,
     name: 'AHAD Exit Re-Entry Visa',
-    description: 'IOC Employees. Facilitating safe and planned international returns.',
-    category: 'AHAD Services'
+    description:
+      'IOC Employees. Facilitating safe and planned international returns.',
+    category: 'AHAD Services',
   };
 
   requestForm: FormGroup;
