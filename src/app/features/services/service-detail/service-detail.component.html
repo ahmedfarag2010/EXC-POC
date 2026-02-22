@@ -1,57 +1,35 @@
 <app-header></app-header>
 
 <div class="service-detail-container">
-  <div class="service-detail-header">
-    <h1>Request</h1>
-    <p class="subtitle">{{ service.category }}</p>
-  </div>
 
   <div class="service-info">
-    <h2>{{ service.name }}</h2>
-    <p>{{ service.description }}</p>
+    <h2>&nbsp;</h2>
   </div>
 
   <div class="request-form-card">
     <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="request-form">
-      @if (errorMessage) {
-        <div class="error-alert">
-          {{ errorMessage }}
-        </div>
-      }
-
-      @if (successMessage) {
-        <div class="success-alert">
-          {{ successMessage }}
-        </div>
-      }
-
       <div class="form-group">
         <label>Iqama Number *</label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           formControlName="iqamaNumber"
-          placeholder="Enter iqama number" 
+          placeholder="Enter iqama number"
           class="form-control"
           [class.error]="requestForm.get('iqamaNumber')?.invalid && requestForm.get('iqamaNumber')?.touched"
         />
-        @if (requestForm.get('iqamaNumber')?.invalid && requestForm.get('iqamaNumber')?.touched) {
-          <span class="error-message">Iqama number is required and must contain only numbers</span>
-        }
       </div>
 
       <div class="form-group">
         <label>Duration *</label>
-        <select formControlName="duration" class="form-control" [class.error]="requestForm.get('duration')?.invalid && requestForm.get('duration')?.touched">
+        <select
+          formControlName="duration"
+          class="form-control"
+          [class.error]="requestForm.get('duration')?.invalid && requestForm.get('duration')?.touched">
           <option value="">Select duration...</option>
-          <option [value]="1">1 Month</option>
-          <option [value]="2">2 Months</option>
-          <option [value]="3">3 Months</option>
-          <option [value]="4">4 Months</option>
-          <option [value]="5">5 Months</option>
+          @for (opt of durationOptions; track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
         </select>
-        @if (requestForm.get('duration')?.invalid && requestForm.get('duration')?.touched) {
-          <span class="error-message">Duration is required</span>
-        }
       </div>
 
       <div class="form-group">
@@ -98,21 +76,14 @@
 
       <div class="form-group">
         <label>Justification</label>
-        <textarea 
+        <textarea
           formControlName="justification"
-          placeholder="Add visa justification..." 
-          class="form-control" 
-          rows="4"
-        ></textarea>
+          placeholder="Add visa justification..."
+          class="form-control"
+          rows="4"></textarea>
       </div>
 
-      <button 
-        type="submit" 
-        class="submit-button"
-        [disabled]="requestForm.invalid || isLoading"
-      >
-        {{ isLoading ? 'Submitting...' : 'Place Request' }}
-      </button>
+      <button type="submit" class="submit-button">Place Request</button>
     </form>
   </div>
 </div>

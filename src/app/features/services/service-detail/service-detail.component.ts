@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../../shared/layout/header/header.component';
 import { RequestsService } from '../../../core/services/requests.service';
+import { LookupsService } from '../../../core/services/lookups.service';
 import { CreateRequestDto, VisaType, VisaRequestType, Duration } from '../../../core/models/request.models';
 
 @Component({
@@ -16,6 +17,7 @@ export class ServiceDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private requestsService = inject(RequestsService);
+  private lookupsService = inject(LookupsService);
   private fb = inject(FormBuilder);
 
   serviceId: string | null = null;
@@ -31,6 +33,14 @@ export class ServiceDetailComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
 
+  durationOptions: { value: Duration; label: string }[] = [
+    { value: Duration.OneMonth,  label: '1 Month' },
+    { value: Duration.TwoMonths, label: '2 Months' },
+    { value: Duration.ThreeMonths, label: '3 Months' },
+    { value: Duration.FourMonths,  label: '4 Months' },
+    { value: Duration.FiveMonths,  label: '5 Months' }
+  ];
+
   constructor() {
     this.requestForm = this.fb.group({
       iqamaNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
@@ -45,6 +55,38 @@ export class ServiceDetailComponent implements OnInit {
   ngOnInit(): void {
     this.serviceId = this.route.snapshot.paramMap.get('serviceId');
     // TODO: Fetch service details based on serviceId if API provides this endpoint
+    this.loadDurationOptions();
+  }
+
+  private loadDurationOptions(): void {
+    this.lookupsService.getLookups().subscribe({
+      next: (data: any) => {
+        console.log('📋 [SERVICE DETAIL] Lookups for duration:', data);
+        const apiDurations = data?.durations ?? data?.durationOptions ?? data?.Duration;
+
+        if (Array.isArray(apiDurations) && apiDurations.length) {
+          const first = apiDurations[0];
+
+          // Case 1: array of numbers (matches Duration enum)
+          if (typeof first === 'number') {
+            this.durationOptions = apiDurations.map((d: number) => ({
+              value: d as Duration,
+              label: `${d} Month${d > 1 ? 's' : ''}`
+            }));
+          } else if (typeof first === 'object') {
+            // Case 2: array of objects with id/name or value/label
+            this.durationOptions = apiDurations.map((d: any) => ({
+              value: (d.id ?? d.value ?? d.duration) as Duration,
+              label: (d.name ?? d.label ?? `${d.id} Month${d.id > 1 ? 's' : ''}`) as string
+            }));
+          }
+        }
+      },
+      error: (error) => {
+        console.error('❌ [SERVICE DETAIL] Failed to load durations from lookups:', error);
+        // Keep default durationOptions on error
+      }
+    });
   }
 
   onSubmit(): void {
