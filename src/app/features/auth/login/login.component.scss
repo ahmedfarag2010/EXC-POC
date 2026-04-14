@@ -183,35 +183,6 @@
   }
 }
 
-.fake-login-section {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 2px dashed #e0e0e0;
-  text-align: center;
-
-  .fake-login-button {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  }
-}
 .divider {
   display: flex;
   align-items: center;

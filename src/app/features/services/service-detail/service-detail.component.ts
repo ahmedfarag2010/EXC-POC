@@ -122,11 +122,11 @@ export class ServiceDetailComponent implements OnInit {
           console.log('✅ [SERVICE DETAIL] Request created successfully:', response);
           this.successMessage = 'Request submitted successfully!';
           this.isLoading = false;
-          
+          this.showPopup = true;
           // Redirect to my-requests after 2 seconds
-          setTimeout(() => {
-            this.router.navigate(['/my-requests']);
-          }, 2000);
+          // setTimeout(() => {
+          //   this.router.navigate(['/my-requests']);
+          // }, 2000);
         },
         error: (error) => {
           console.error('❌ [SERVICE DETAIL] Failed to create request:', error);

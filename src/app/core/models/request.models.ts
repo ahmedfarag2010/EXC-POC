@@ -40,7 +40,7 @@ export interface Request {
   requestNumber?: string;
   employee?: string;
   serviceType?: string;
-  submissionDate?: string;
+  createdAt?: string;
   lastUpdated?: string;
   status: RequestStatus;
   serviceDetails?: RequestServiceDetails;

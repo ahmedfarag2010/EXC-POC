@@ -25,25 +25,23 @@
         <table class="tasks-table">
           <thead>
             <tr>
-              <th>Request #</th>
-              <th>Employee</th>
+              <th>Request Number</th>
+              <!-- <th>Employee</th> -->
               <th>Service Type</th>
               <th>Submission Date</th>
-              <th>Last Updated</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            @for (task of tasks; track task.id) {
+            @for (task of tasks; track task.requestId) {
               <tr class="table-row">
                 <td>
-                  <a [routerLink]="['/my-tasks', task.id]" class="task-link">{{ task.id }}</a>
+                  <a [routerLink]="['/my-tasks', task.requestId]" class="task-link">{{ task.requestId }}</a>
                 </td>
-                <td>{{ task.employee || 'N/A' }}</td>
-                <td>{{ task.serviceType || 'N/A' }}</td>
-                <td>{{ task.submissionDate || 'N/A' }}</td>
-                <td>{{ task.lastUpdated || 'N/A' }}</td>
+                <!-- <td>{{ task.employee || 'N/A' }}</td> -->
+                <td>AHAD Exit Re-Entry Visa</td>
+                <td>{{ task.createdAt | date:'dd-MM-yyyy'}}</td>
                 <td>
                   <span class="status-badge" [ngClass]="getStatusClass(task.status)">
                     {{ getStatusDisplay(task.status) }}
@@ -51,17 +49,17 @@
                 </td>
                 <td>
                   <div class="action-buttons">
-                    <button class="action-btn approve" [routerLink]="['/my-tasks', task.id]" title="View & Approve">
+                    <button class="action-btn approve" [routerLink]="['/my-tasks', task.requestId]" title="View & Approve">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </button>
-                    <button class="action-btn reject" [routerLink]="['/my-tasks', task.id]" title="View & Reject">
+                    <button class="action-btn reject" [routerLink]="['/my-tasks', task.requestId]" title="View & Reject">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </button>
-                    <button class="action-btn view" [routerLink]="['/my-tasks', task.id]" title="View Details">
+                    <button class="action-btn view" [routerLink]="['/my-tasks', task.requestId]" title="View Details">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/>
                         <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>

@@ -25,10 +25,9 @@
         <table class="requests-table">
           <thead>
             <tr>
-              <th>Request #</th>
+              <th>Request Number</th>
               <th>Service Type</th>
               <th>Submission Date</th>
-              <th>Last Updated</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -38,9 +37,8 @@
                 <td>
                   <a class="request-link">{{ request.id }}</a>
                 </td>
-                <td>{{ request.serviceType || 'N/A' }}</td>
-                <td>{{ request.submissionDate || 'N/A' }}</td>
-                <td>{{ request.lastUpdated || 'N/A' }}</td>
+                <td>AHAD Exit Re-Entry Visa</td>
+                <td>{{ request.createdAt | date:'dd-MM-yyyy' }}</td>
                 <td>
                   <span class="status-badge" [ngClass]="getStatusClass(request.status)">
                     {{ getStatusDisplay(request.status) }}

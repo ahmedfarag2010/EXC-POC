@@ -38,30 +38,21 @@ export class LoginComponent {
 
       const { email, password } = this.loginForm.value;
 
-      console.log('🔐 [FAKE LOGIN] Attempting login with:', { email, password });
+      console.log('🔐 [LOGIN] Attempting login with:', { email, password });
 
       this.authService.login(email, password).subscribe({
         next: (response) => {
-          console.log('✅ [FAKE LOGIN] Login successful:', response);
+          console.log('✅ [LOGIN] Login successful:', response);
           this.isLoading = false;
           // Redirect to home page after successful login
           this.router.navigate(['/home']);
         },
         error: (error) => {
-          console.error('❌ [FAKE LOGIN] Login failed:', error);
+          console.error('❌ [LOGIN] Login failed:', error);
           this.isLoading = false;
           this.errorMessage = error.message || 'Login failed. Please check your credentials.';
         }
       });
     }
-  }
-
-  fakeLogin(): void {
-    console.log('🚀 [FAKE LOGIN] Using fake login credentials');
-    this.loginForm.patchValue({
-      email: 'test@example.com',
-      password: 'password123'
-    });
-    this.onSubmit();
   }
 }

@@ -14,7 +14,7 @@ export interface ManagerTask {
   requestId: string;
   employee?: string;
   serviceType?: string;
-  submissionDate?: string;
+  createdAt?: string;
   lastUpdated?: string;
   status: number;
   serviceDetails?: RequestServiceDetails;

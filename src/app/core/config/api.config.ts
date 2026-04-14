@@ -2,7 +2,7 @@
  * API Configuration
  */
 export const API_CONFIG = {
-  baseUrl: 'http://www.exc.somee.com',
+  baseUrl: 'http://172.17.244.4:70',
   endpoints: {
     auth: {
       login: '/api/auth/login',
