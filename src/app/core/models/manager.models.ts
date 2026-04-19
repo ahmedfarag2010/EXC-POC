@@ -5,7 +5,7 @@ import type { UpdateHistoryItem, RequestServiceDetails } from './request.models'
  */
 
 export interface ManagerDecisionDto {
-  requestId: string; // UUID
+  taskId: string; // UUID
   isApproved: boolean;
 }
 

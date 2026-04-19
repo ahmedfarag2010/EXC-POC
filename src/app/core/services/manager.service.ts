@@ -25,6 +25,10 @@ export class ManagerService {
   makeDecision(decision: ManagerDecisionDto): Observable<any> {
     const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.manager.decision}`;
     console.log('✅ [MANAGER SERVICE] Submitting decision:', decision);
-    return this.http.post(url, decision);
+    const payload = {
+      taskId: decision.taskId,
+      isApproved: decision.isApproved
+    };
+    return this.http.post(url, payload);
   }
 }

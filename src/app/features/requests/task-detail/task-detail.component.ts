@@ -102,7 +102,7 @@ export class TaskDetailComponent implements OnInit {
     this.successMessage = '';
 
     const decision = {
-      requestId: this.taskId,
+      taskId: this.taskId,
       isApproved: isApproved
     };
 
