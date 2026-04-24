@@ -34,10 +34,10 @@
             </tr>
           </thead>
           <tbody>
-            @for (task of tasks; track task.requestId) {
+            @for (task of tasks; track task.taskId || task.requestId) {
               <tr class="table-row">
                 <td>
-                  <a [routerLink]="['/my-tasks', task.requestId]" class="task-link">{{ task.requestId }}</a>
+                  <a [routerLink]="['/my-tasks', task.taskId || task.requestId]" class="task-link">{{ task.requestOrder || 'N/A' }}</a>
                 </td>
                 <!-- <td>{{ task.employee || 'N/A' }}</td> -->
                 <td>AHAD Exit Re-Entry Visa</td>
@@ -49,17 +49,17 @@
                 </td>
                 <td>
                   <div class="action-buttons">
-                    <button class="action-btn approve" [routerLink]="['/my-tasks', task.requestId]" title="View & Approve">
+                    <button class="action-btn approve" [routerLink]="['/my-tasks', task.taskId || task.requestId]" title="View & Approve">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </button>
-                    <button class="action-btn reject" [routerLink]="['/my-tasks', task.requestId]" title="View & Reject">
+                    <button class="action-btn reject" [routerLink]="['/my-tasks', task.taskId || task.requestId]" title="View & Reject">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </button>
-                    <button class="action-btn view" [routerLink]="['/my-tasks', task.requestId]" title="View Details">
+                    <button class="action-btn view" [routerLink]="['/my-tasks', task.taskId || task.requestId]" title="View Details">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/>
                         <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>

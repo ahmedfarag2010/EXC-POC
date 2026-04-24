@@ -21,7 +21,7 @@ export enum Duration {
 }
 
 export enum RequestStatus {
-  Pending = 1,
+  InProgress = 1,
   Approved = 2,
   Rejected = 3
 }
@@ -37,6 +37,7 @@ export interface CreateRequestDto {
 
 export interface Request {
   id: string;
+  requestOrder?: string;
   requestNumber?: string;
   employee?: string;
   serviceType?: string;

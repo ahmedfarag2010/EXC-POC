@@ -37,7 +37,7 @@ export class TaskDetailComponent implements OnInit {
     this.isLoading = true;
     this.managerService.getManagerTasks().subscribe({
       next: (tasks: ManagerTask[]) => {
-        const foundTask = tasks.find(t => t.id === this.taskId || t.requestId === this.taskId);
+        const foundTask = tasks.find(t => t.taskId === this.taskId || t.id === this.taskId || t.requestId === this.taskId);
         if (foundTask) {
           this.task = foundTask;
         } else {
@@ -54,32 +54,49 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getStatusClass(status: number | string): string {
+    const statusKey = typeof status === 'string' ? status.toLowerCase().replace(/\s+/g, '') : '';
+    if (statusKey === 'inprogress') {
+      return 'status-inprogress';
+    }
     const statusNum = typeof status === 'string' ? this.parseStatus(status) : status;
     const statusMap: { [key: number]: string } = {
-      [RequestStatus.Pending]: 'status-pending',
+      [RequestStatus.InProgress]: 'status-inprogress',
       [RequestStatus.Approved]: 'status-approved',
       [RequestStatus.Rejected]: 'status-rejected'
     };
-    return statusMap[statusNum] || 'status-pending';
+    return statusMap[statusNum] || '';
   }
 
   getStatusDisplay(status: number | string): string {
+    if (typeof status === 'string' && !status.match(/^\d+$/)) {
+      const statusKey = status.toLowerCase().replace(/\s+/g, '');
+      const statusTextMap: { [key: string]: string } = {
+        inprogress: 'In Progress',
+        approved: 'Approved',
+        rejected: 'Rejected'
+      };
+      return statusTextMap[statusKey] || status;
+    }
     const statusNum = typeof status === 'string' ? this.parseStatus(status) : status;
     const statusMap: { [key: number]: string } = {
-      [RequestStatus.Pending]: 'Pending',
+      [RequestStatus.InProgress]: 'In Progress',
       [RequestStatus.Approved]: 'Approved',
       [RequestStatus.Rejected]: 'Rejected'
     };
-    return statusMap[statusNum] || 'Pending';
+    return statusMap[statusNum] || String(status ?? 'N/A');
   }
 
   private parseStatus(status: string): number {
+    if (/^\d+$/.test(status)) {
+      return Number(status);
+    }
     const statusMap: { [key: string]: number } = {
-      'Pending': RequestStatus.Pending,
-      'Approved': RequestStatus.Approved,
-      'Rejected': RequestStatus.Rejected
+      pending: RequestStatus.InProgress,
+      inprogress: RequestStatus.InProgress,
+      approved: RequestStatus.Approved,
+      rejected: RequestStatus.Rejected
     };
-    return statusMap[status] || RequestStatus.Pending;
+    return statusMap[status.toLowerCase()] || Number.NaN;
   }
 
   approveTask(): void {
@@ -96,13 +113,14 @@ export class TaskDetailComponent implements OnInit {
 
   private submitDecision(isApproved: boolean): void {
     if (!this.taskId) return;
+    const resolvedTaskId = this.task?.taskId || this.taskId;
 
     this.isSubmitting = true;
     this.errorMessage = '';
     this.successMessage = '';
 
     const decision = {
-      taskId: this.taskId,
+      taskId: resolvedTaskId,
       isApproved: isApproved
     };
 
@@ -127,9 +145,4 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  delegateTask(): void {
-    // TODO: Implement delegate logic if API supports it
-    console.log('Delegate task');
-    this.errorMessage = 'Delegation feature not yet implemented.';
-  }
 }

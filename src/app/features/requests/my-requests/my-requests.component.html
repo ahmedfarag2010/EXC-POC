@@ -35,7 +35,7 @@
             @for (request of requests; track request.id) {
               <tr [routerLink]="['/my-requests', request.id]" class="table-row">
                 <td>
-                  <a class="request-link">{{ request.id }}</a>
+                  <a class="request-link">{{ request.requestOrder || 'N/A' }}</a>
                 </td>
                 <td>AHAD Exit Re-Entry Visa</td>
                 <td>{{ request.createdAt | date:'dd-MM-yyyy' }}</td>

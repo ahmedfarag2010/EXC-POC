@@ -11,6 +11,8 @@ export interface ManagerDecisionDto {
 
 export interface ManagerTask {
   id: string;
+  taskId?: string;
+  requestOrder?: string;
   requestId: string;
   employee?: string;
   serviceType?: string;

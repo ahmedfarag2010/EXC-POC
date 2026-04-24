@@ -104,6 +104,10 @@
       &.status-rejected {
         color: #f44336;
       }
+
+      &.status-inprogress {
+        color: #f9a825;
+      }
     }
 
     p.value {

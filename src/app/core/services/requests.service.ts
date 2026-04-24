@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { API_CONFIG } from '../config/api.config';
 import { CreateRequestDto, Request, RequestStatus } from '../models/request.models';
 
@@ -9,6 +9,24 @@ import { CreateRequestDto, Request, RequestStatus } from '../models/request.mode
 })
 export class RequestsService {
   private http = inject(HttpClient);
+
+  private normalizeRequest(request: any): Request {
+    return {
+      ...request,
+      requestOrder: request.requestOrder ?? request.RequestOrder,
+      employee: request.createdBy ?? request.employee,
+      serviceType: request.ServiceName ?? request.serviceName ?? request.serviceType,
+      status: request.status,
+      serviceDetails: request.serviceDetails ?? {
+        iqamaNumber: request.iqamaNumber,
+        duration: request.duration,
+        visaType: request.visaType,
+        type: request.type,
+        visaFees: request.visaFees,
+        justification: request.justification
+      }
+    } as Request;
+  }
 
   /**
    * Create a new request
@@ -32,16 +50,8 @@ export class RequestsService {
     }
 
     console.log('📋 [REQUESTS SERVICE] Fetching my requests:', { status, url });
-    return this.http.get<Request[]>(url, { params });
-  }
-
-  /**
-   * Get request by ID
-   * Note: This endpoint might not exist in the API, but we'll prepare for it
-   */
-  getRequestById(requestId: string): Observable<Request> {
-    const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.requests.my}/${requestId}`;
-    console.log('🔍 [REQUESTS SERVICE] Fetching request:', requestId);
-    return this.http.get<Request>(url);
+    return this.http.get<any[]>(url, { params }).pipe(
+      map((requests) => requests.map((request) => this.normalizeRequest(request)))
+    );
   }
 }
