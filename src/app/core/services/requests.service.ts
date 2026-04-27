@@ -1,8 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, of, map } from 'rxjs';
 import { API_CONFIG } from '../config/api.config';
 import { CreateRequestDto, Request, RequestStatus } from '../models/request.models';
+
+/** Set true to skip POST and only log payload (for debugging) */
+const HOLD_REQUESTS_CREATE = false;
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +32,32 @@ export class RequestsService {
   }
 
   /**
-   * Create a new request
+   * Create a new request (e.g. static visa form). Body: `{ serviceId, JsonData }` where
+   * `JsonData` is a JSON string of the form DTO.
    */
-  createRequest(request: CreateRequestDto): Observable<any> {
+  createRequest(serviceId: string, request: CreateRequestDto): Observable<unknown> {
+    const body = { serviceId, JsonData: JSON.stringify(request) };
     const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.requests.create}`;
-    console.log('📝 [REQUESTS SERVICE] Creating request:', request);
-    return this.http.post(url, request);
+    if (HOLD_REQUESTS_CREATE) {
+      console.log('[REQUESTS SERVICE] HOLD: POST not sent. URL would be:', url);
+      console.log('[REQUESTS SERVICE] HOLD: payload:', body);
+      return of({ held: true, message: 'POST /api/requests skipped (HOLD_REQUESTS_CREATE)' });
+    }
+    return this.http.post<unknown>(url, body);
+  }
+
+  /**
+   * Submit a dynamic service request. Body: `{ serviceId, JsonData }` where
+   * `JsonData` is a JSON string of the controls array (each item includes `value`).
+   */
+  createServiceRequest(body: { serviceId: string; JsonData: string }): Observable<unknown> {
+    const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.requests.create}`;
+    if (HOLD_REQUESTS_CREATE) {
+      console.log('[REQUESTS SERVICE] HOLD: POST not sent. URL would be:', url);
+      console.log('[REQUESTS SERVICE] HOLD: payload:', body);
+      return of({ held: true, message: 'POST /api/requests skipped (HOLD_REQUESTS_CREATE)' });
+    }
+    return this.http.post<unknown>(url, body);
   }
 
   /**

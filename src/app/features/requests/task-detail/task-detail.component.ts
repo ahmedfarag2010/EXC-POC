@@ -40,6 +40,7 @@ export class TaskDetailComponent implements OnInit {
         const foundTask = tasks.find(t => t.taskId === this.taskId || t.id === this.taskId || t.requestId === this.taskId);
         if (foundTask) {
           this.task = foundTask;
+          this.logParsedJsonData(foundTask);
         } else {
           this.errorMessage = 'Task not found';
         }
@@ -97,6 +98,19 @@ export class TaskDetailComponent implements OnInit {
       rejected: RequestStatus.Rejected
     };
     return statusMap[status.toLowerCase()] || Number.NaN;
+  }
+
+  private logParsedJsonData(task: ManagerTask): void {
+    const rawJsonData = (task as any)?.jsonData ?? (task as any)?.JsonData;
+    if (typeof rawJsonData !== 'string' || rawJsonData.trim() === '') {
+      return;
+    }
+    try {
+      const parsed = JSON.parse(rawJsonData);
+      console.log('✅ [TASK DETAIL] Parsed jsonData:', parsed);
+    } catch (error) {
+      console.error('❌ [TASK DETAIL] Failed to parse jsonData:', error);
+    }
   }
 
   approveTask(): void {

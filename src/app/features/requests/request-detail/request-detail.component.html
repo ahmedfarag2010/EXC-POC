@@ -44,26 +44,26 @@
 
       <div class="detail-card">
         <h3>Service Details</h3>
-        <div class="info-row">
-          <span class="label">Iqama Number:</span>
-          <span class="value">{{ request.serviceDetails?.iqamaNumber || 'N/A' }}</span>
-        </div>
-        <div class="info-row">
-          <span class="label">Duration:</span>
-          <span class="value">{{ request.serviceDetails?.duration || 'N/A' }}</span>
-        </div>
-        <div class="info-row">
-          <span class="label">Visa Type:</span>
-          <span class="value">{{ request.serviceDetails?.visaType || 'N/A' }}</span>
-        </div>
-        <div class="info-row">
-          <span class="label">Visa Fees:</span>
-          <span class="value">{{ request.serviceDetails?.visaFees !== undefined ? (request.serviceDetails?.visaFees ? 'Yes' : 'No') : 'N/A' }}</span>
-        </div>
-        @if (request.serviceDetails?.justification) {
-          <div class="info-row full-width">
-            <span class="label">Justification:</span>
-            <p class="value">{{ request.serviceDetails?.justification }}</p>
+        @if (serviceDetailRows.length > 0) {
+          @for (row of serviceDetailRows; track row.label) {
+            <div class="info-row">
+              <span class="label">{{ row.label }}:</span>
+              @if (row.isImage && row.imageSrc) {
+                <img
+                  class="uploaded-image-preview"
+                  [src]="row.imageSrc"
+                  [alt]="row.label"
+                  width="150"
+                />
+              } @else {
+                <span class="value">{{ row.value }}</span>
+              }
+            </div>
+          }
+        } @else {
+          <div class="info-row">
+            <span class="label">Service Details:</span>
+            <span class="value">N/A</span>
           </div>
         }
       </div>

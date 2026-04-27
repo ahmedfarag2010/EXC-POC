@@ -1,91 +1,304 @@
 <app-header></app-header>
 
 <div class="service-detail-container">
-
   <div class="service-info">
-    <h2>&nbsp;</h2>
+    <h2>{{ service?.name ?? "Service" }}</h2>
+    @if (service?.description) {
+      <p class="service-desc">{{ service?.description }}</p>
+    }
   </div>
 
-  <div class="request-form-card">
-    <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="request-form">
-      <div class="form-group">
-        <label>Iqama Number *</label>
-        <input
-          type="text"
-          formControlName="iqamaNumber"
-          placeholder="Enter iqama number"
-          class="form-control"
-          [class.error]="requestForm.get('iqamaNumber')?.invalid && requestForm.get('iqamaNumber')?.touched"
-        />
-      </div>
+  @if (detailLoading) {
+    <p class="state-msg">Loading service…</p>
+  }
 
-      <div class="form-group">
-        <label>Duration *</label>
-        <select
-          formControlName="duration"
-          class="form-control"
-          [class.error]="requestForm.get('duration')?.invalid && requestForm.get('duration')?.touched">
-          <option value="">Select duration...</option>
-          @for (opt of durationOptions; track opt.value) {
-            <option [value]="opt.value">{{ opt.label }}</option>
+  @if (errorMessage && !requestForm) {
+    <p class="state-msg error">{{ errorMessage }}</p>
+  }
+
+  @if (errorMessage && requestForm) {
+    <p class="form-error-banner">{{ errorMessage }}</p>
+  }
+
+  @if (requestForm) {
+    <div class="request-form-card">
+      <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="request-form">
+        @if (useDynamicForm && service) {
+          @for (c of service.controls; track c.name) {
+            <div class="form-group">
+              <label [attr.for]="c.name">{{ c.label }}{{ c.required ? " *" : "" }}</label>
+              @switch (c.type) {
+                @case ("text") {
+                  <input
+                    type="text"
+                    [id]="c.name"
+                    [formControlName]="c.name"
+                    [attr.placeholder]="c.placeholder ?? null"
+                    class="form-control"
+                    [class.error]="
+                      requestForm.get(c.name)?.invalid && requestForm.get(c.name)?.touched
+                    "
+                  />
+                }
+                @case ("number") {
+                  <input
+                    type="text"
+                    [id]="c.name"
+                    [formControlName]="c.name"
+                    [attr.placeholder]="c.placeholder ?? null"
+                    class="form-control"
+                    [class.error]="
+                      requestForm.get(c.name)?.invalid && requestForm.get(c.name)?.touched
+                    "
+                    inputmode="decimal"
+                    autocomplete="off"
+                  />
+                }
+                @case ("date") {
+                  <input
+                    type="date"
+                    [id]="c.name"
+                    [formControlName]="c.name"
+                    class="form-control"
+                    [class.error]="
+                      requestForm.get(c.name)?.invalid && requestForm.get(c.name)?.touched
+                    "
+                  />
+                }
+                @case ("dateRange") {
+                  <div class="date-range-group">
+                    <input
+                      type="date"
+                      [id]="rangeStartName(c)"
+                      [formControlName]="rangeStartName(c)"
+                      class="form-control"
+                      [class.error]="
+                        requestForm.get(rangeStartName(c))?.invalid &&
+                        requestForm.get(rangeStartName(c))?.touched
+                      "
+                    />
+                    <span class="range-separator" aria-hidden="true">to</span>
+                    <input
+                      type="date"
+                      [id]="rangeEndName(c)"
+                      [formControlName]="rangeEndName(c)"
+                      class="form-control"
+                      [class.error]="
+                        requestForm.get(rangeEndName(c))?.invalid &&
+                        requestForm.get(rangeEndName(c))?.touched
+                      "
+                    />
+                  </div>
+                }
+                @case ("textarea") {
+                  <textarea
+                    [id]="c.name"
+                    [formControlName]="c.name"
+                    [attr.placeholder]="c.placeholder ?? null"
+                    class="form-control"
+                    rows="4"
+                    [class.error]="
+                      requestForm.get(c.name)?.invalid && requestForm.get(c.name)?.touched
+                    "
+                  ></textarea>
+                }
+                @case ("select") {
+                  <select
+                    [id]="c.name"
+                    [formControlName]="c.name"
+                    class="form-control"
+                    [class.error]="
+                      requestForm.get(c.name)?.invalid && requestForm.get(c.name)?.touched
+                    "
+                    [disabled]="!c.options.length"
+                  >
+                    @if (c.options.length) {
+                      <option [ngValue]="null" disabled hidden>
+                        {{ c.placeholder || "Select…" }}
+                      </option>
+                    } @else {
+                      <option [ngValue]="null" disabled>
+                        {{ c.placeholder || "No options available" }}
+                      </option>
+                    }
+                    @for (opt of c.options; track opt.value) {
+                      <option [ngValue]="opt.value">{{ opt.label }}</option>
+                    }
+                  </select>
+                }
+                @case ("radio") {
+                  <div class="radio-group">
+                    @if (c.options.length) {
+                      @for (opt of c.options; track opt.value) {
+                        <label class="radio-option">
+                          <input
+                            type="radio"
+                            [formControlName]="c.name"
+                            [value]="opt.value"
+                          />
+                          <span>{{ opt.label }}</span>
+                        </label>
+                      }
+                    } @else {
+                      <p class="hint">No options provided for this field</p>
+                    }
+                  </div>
+                }
+                @case ("checkbox") {
+                  <div class="checkbox-group" [class.error]="
+                    requestForm.get(c.name)?.invalid && requestForm.get(c.name)?.touched
+                  ">
+                    @if (c.options.length) {
+                      @for (opt of c.options; track opt.value) {
+                        <label class="checkbox-option">
+                          <input
+                            type="checkbox"
+                            [checked]="isCheckboxChecked(c.name, opt.value)"
+                            (change)="
+                              onCheckboxChange(c.name, opt.value, $any($event.target).checked)
+                            "
+                          />
+                          <span>{{ opt.label }}</span>
+                        </label>
+                      }
+                    } @else {
+                      <p class="hint">Add options in the form definition for checkboxes</p>
+                    }
+                  </div>
+                }
+                @case ("file") {
+                  <input
+                    type="file"
+                    [id]="c.name"
+                    class="form-control file-input"
+                    [class.error]="
+                      requestForm.get(c.name)?.invalid && requestForm.get(c.name)?.touched
+                    "
+                    (change)="onFileChange($event, c)"
+                  />
+                }
+                @case ("boolean") {
+                  <div class="radio-group">
+                    @if (c.options.length) {
+                      @for (opt of c.options; track opt.value) {
+                        <label class="radio-option">
+                          <input
+                            type="radio"
+                            [formControlName]="c.name"
+                            [value]="opt.value"
+                          />
+                          <span>{{ opt.label }}</span>
+                        </label>
+                      }
+                    } @else {
+                      <label class="radio-option">
+                        <input type="radio" [formControlName]="c.name" [value]="true" />
+                        <span>Yes</span>
+                      </label>
+                      <label class="radio-option">
+                        <input type="radio" [formControlName]="c.name" [value]="false" />
+                        <span>No</span>
+                      </label>
+                    }
+                  </div>
+                }
+              }
+            </div>
           }
-        </select>
-      </div>
+        } @else {
+          <div class="form-group">
+            <label>Iqama Number *</label>
+            <input
+              type="text"
+              formControlName="iqamaNumber"
+              placeholder="Enter iqama number"
+              class="form-control"
+              [class.error]="
+                requestForm.get('iqamaNumber')?.invalid && requestForm.get('iqamaNumber')?.touched
+              "
+            />
+          </div>
 
-      <div class="form-group">
-        <label>Visa Type *</label>
-        <div class="radio-group">
-          <label class="radio-option">
-            <input type="radio" formControlName="visaType" [value]="1" />
-            <span>Single</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" formControlName="visaType" [value]="2" />
-            <span>Multiple</span>
-          </label>
-        </div>
-      </div>
+            <div class="form-group">
+            <label for="static-duration">Duration *</label>
+            <select
+              id="static-duration"
+              formControlName="duration"
+              class="form-control"
+              [class.error]="
+                requestForm.get('duration')?.invalid && requestForm.get('duration')?.touched
+              "
+            >
+              <option value="">Select duration...</option>
+              @for (opt of durationOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+          </div>
 
-      <div class="form-group">
-        <label>Type *</label>
-        <div class="radio-group">
-          <label class="radio-option">
-            <input type="radio" formControlName="type" [value]="1" />
-            <span>Single Visa</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" formControlName="type" [value]="2" />
-            <span>Family Visa</span>
-          </label>
-        </div>
-      </div>
+          <div class="form-group">
+            <label>Visa Type *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="visaType" [value]="1" />
+                <span>Single</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="visaType" [value]="2" />
+                <span>Multiple</span>
+              </label>
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Visa Fees? *</label>
-        <div class="radio-group">
-          <label class="radio-option">
-            <input type="radio" formControlName="visaFees" [value]="true" />
-            <span>Yes</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" formControlName="visaFees" [value]="false" />
-            <span>No</span>
-          </label>
-        </div>
-      </div>
+          <div class="form-group">
+            <label>Type *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="type" [value]="1" />
+                <span>Single Visa</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="type" [value]="2" />
+                <span>Family Visa</span>
+              </label>
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Justification</label>
-        <textarea
-          formControlName="justification"
-          placeholder="Add visa justification..."
-          class="form-control"
-          rows="4"></textarea>
-      </div>
+          <div class="form-group">
+            <label>Visa Fees? *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="visaFees" [value]="true" />
+                <span>Yes</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="visaFees" [value]="false" />
+                <span>No</span>
+              </label>
+            </div>
+          </div>
 
-      <button type="submit" class="submit-button">Submit Request</button>
-    </form>
-  </div>
+          <div class="form-group">
+            <label>Justification</label>
+            <textarea
+              formControlName="justification"
+              placeholder="Add visa justification..."
+              class="form-control"
+              rows="4"
+            ></textarea>
+          </div>
+        }
+
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="saving || requestForm.invalid"
+        >
+          {{ saving ? "Submitting…" : "Submit Request" }}
+        </button>
+      </form>
+    </div>
+  }
 </div>
 
 <app-confirmation-popup [(visible)]="showPopup"></app-confirmation-popup>

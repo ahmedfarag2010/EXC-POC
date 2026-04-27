@@ -37,7 +37,7 @@
                 <td>
                   <a class="request-link">{{ request.requestOrder || 'N/A' }}</a>
                 </td>
-                <td>AHAD Exit Re-Entry Visa</td>
+                <td>{{ request.serviceType || 'N/A' }}</td>
                 <td>{{ request.createdAt | date:'dd-MM-yyyy' }}</td>
                 <td>
                   <span class="status-badge" [ngClass]="getStatusClass(request.status)">

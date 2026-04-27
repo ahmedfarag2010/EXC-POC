@@ -17,6 +17,12 @@ export class RequestDetailComponent implements OnInit {
 
   requestId: string | null = null;
   request: Request | null = null;
+  serviceDetailRows: Array<{
+    label: string;
+    value: string;
+    isImage?: boolean;
+    imageSrc?: string;
+  }> = [];
   isLoading = false;
   errorMessage = '';
 
@@ -39,6 +45,7 @@ export class RequestDetailComponent implements OnInit {
         const found = requests.find((r) => r.id === requestId);
         if (found) {
           this.request = found;
+          this.serviceDetailRows = this.parseServiceDetailsRows(found);
         } else {
           this.errorMessage = 'Request not found.';
         }
@@ -96,5 +103,87 @@ export class RequestDetailComponent implements OnInit {
       rejected: RequestStatus.Rejected
     };
     return statusMap[status.toLowerCase()] || Number.NaN;
+  }
+
+  private parseServiceDetailsRows(request: Request): Array<{
+    label: string;
+    value: string;
+    isImage?: boolean;
+    imageSrc?: string;
+  }> {
+    const rawJsonData = (request as any)?.jsonData ?? (request as any)?.JsonData;
+    if (typeof rawJsonData !== 'string' || rawJsonData.trim() === '') {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(rawJsonData) as any[];
+      console.log('✅ [REQUEST DETAIL] Parsed jsonData:', parsed);
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+
+      return parsed
+        .filter((item) => item && typeof item === 'object')
+        .map((item) => {
+          const label = String(item.label ?? item.Label ?? 'N/A');
+          const type = String(item.type ?? item.Type ?? '').toLowerCase();
+          const imageSrc = type === 'file' ? this.extractImageSrc(item.value) : null;
+          if (imageSrc) {
+            return { label, value: '', isImage: true, imageSrc };
+          }
+          const value = this.extractDisplayValue(item.value);
+          return { label, value, isImage: false };
+        });
+    } catch (error) {
+      console.error('❌ [REQUEST DETAIL] Failed to parse jsonData:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Mapping rules:
+   * 1) If value is array -> use value[0]
+   * 2) If chosen value is object -> use chosen.label (dropdown/radio style)
+   */
+  private extractDisplayValue(rawValue: unknown): string {
+    const first = Array.isArray(rawValue) ? rawValue[0] : rawValue;
+    if (first === undefined || first === null || first === '') {
+      return 'N/A';
+    }
+    if (typeof first === 'object') {
+      const obj = first as Record<string, unknown>;
+      if (typeof obj['label'] === 'string' && obj['label'].trim() !== '') {
+        return obj['label'];
+      }
+      if (typeof obj['start'] === 'string' || typeof obj['end'] === 'string') {
+        const start = typeof obj['start'] === 'string' ? obj['start'] : '';
+        const end = typeof obj['end'] === 'string' ? obj['end'] : '';
+        return [start, end].filter(Boolean).join(' - ') || 'N/A';
+      }
+      return 'N/A';
+    }
+    return String(first);
+  }
+
+  private extractImageSrc(rawValue: unknown): string | null {
+    const first = Array.isArray(rawValue) ? rawValue[0] : rawValue;
+    if (!first || typeof first !== 'object') {
+      return null;
+    }
+    const obj = first as Record<string, unknown>;
+    const data = obj['data'];
+    if (typeof data !== 'string' || data.trim() === '') {
+      return null;
+    }
+    // Handle both full data URLs and raw base64 payloads.
+    if (data.startsWith('data:')) {
+      return data;
+    }
+    const contentType =
+      typeof obj['contentType'] === 'string' && obj['contentType'].trim() !== ''
+        ? obj['contentType']
+        : 'image/png';
+    return `data:${contentType};base64,${data}`;
   }
 }

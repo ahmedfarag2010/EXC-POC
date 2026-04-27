@@ -5,6 +5,18 @@
   font-family: "Google Sans", sans-serif;
 }
 
+.services-state {
+  max-width: 1400px;
+  margin: 0 auto 16px;
+  padding: 0 4px;
+  color: #333;
+  font-size: 15px;
+
+  &.error {
+    color: #c62828;
+  }
+}
+
 .services-header {
   max-width: 1400px;
   margin: 0 auto 30px;

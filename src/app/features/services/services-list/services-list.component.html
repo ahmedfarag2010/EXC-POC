@@ -5,6 +5,12 @@
     <h1>&nbsp;</h1>
   </div>
 
+  @if (isLoading) {
+  <p class="services-state">Loading services…</p>
+  } @else if (errorMessage && services.length === 0) {
+  <p class="services-state error">{{ errorMessage }}</p>
+  }
+
   <div class="services-content">
     <aside class="categories-sidebar">
       <div class="filter-tabs">

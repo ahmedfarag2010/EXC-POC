@@ -1,9 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { catchError, forkJoin, of } from 'rxjs';
 import { HeaderComponent } from '../../../shared/layout/header/header.component';
 import { LookupsService } from '../../../core/services/lookups.service';
+import { ServicesCatalogService } from '../../../core/services/services-catalog.service';
 import { LookupData } from '../../../core/models/lookup.models';
+import { ServiceSummary } from '../../../core/models/service.models';
 
 @Component({
   selector: 'app-services-list',
@@ -13,83 +16,74 @@ import { LookupData } from '../../../core/models/lookup.models';
 })
 export class ServicesListComponent implements OnInit {
   private lookupsService = inject(LookupsService);
+  private catalogService = inject(ServicesCatalogService);
 
-  private readonly singleServiceCard = {
-    id: 1,
-    name: 'AHAD Exit Re-Entry Visa',
-    description: 'IOC Employees. Facilitating safe and planned international returns.',
-    category: 'AHAD Services'
-  };
-
-  services: any[] = [this.singleServiceCard];
+  services: ServiceSummary[] = [];
   categories: string[] = [];
   selectedCategory = 'All';
-  filterType = 'All'; // 'All' or 'Popular'
+  filterType = 'All';
   isLoading = false;
   errorMessage = '';
 
   ngOnInit(): void {
-    this.loadLookups();
+    this.load();
   }
 
-  loadLookups(): void {
+  private load(): void {
     this.isLoading = true;
     this.errorMessage = '';
-    // Always show the single service card (POC requirement)
-    this.services = [this.singleServiceCard];
 
-    this.lookupsService.getLookups().subscribe({
-      next: (data: LookupData) => {
-        console.log('✅ [SERVICES LIST] Lookups loaded:', data);
-        
-        // Extract categories and services from lookup data
-        // Adjust based on actual API response structure
-        if (data.categories) {
-          this.categories = data.categories.map(cat => cat.name);
-        }
-        // Services page requirement (POC): show only one service card.
-        // Keep the hardcoded single service above, regardless of API response.
-        this.services = [this.singleServiceCard];
-
-        // Fallback to default categories if API doesn't return them
-        if (this.categories.length === 0) {
-          this.categories = [
-            'IT Support Services',
-            'Infrastructure Services',
-            'Enterprise Applications',
-            'Facilities Services',
-            'Internal Communications',
-            'Finance Services',
-            'Procurement Tools Services',
-            'Contact Center Inquiries',
-            'Vendor Management',
-            'Contracts'
-          ];
-        }
-
+    forkJoin({
+      services: this.catalogService.getServices().pipe(
+        catchError((err) => {
+          console.error('[SERVICES LIST] Failed to load services:', err);
+          this.errorMessage = 'Failed to load services. Please try again later.';
+          return of([] as ServiceSummary[]);
+        })
+      ),
+      lookups: this.lookupsService.getLookups().pipe(
+        catchError((err) => {
+          console.error('[SERVICES LIST] Failed to load lookups:', err);
+          return of({} as LookupData);
+        })
+      )
+    }).subscribe({
+      next: ({ services, lookups }) => {
+        this.services = services;
+        this.applyCategories(lookups, services);
         this.isLoading = false;
       },
-      error: (error) => {
-        console.error('❌ [SERVICES LIST] Failed to load lookups:', error);
-        this.errorMessage = 'Failed to load services. Please try again later.';
+      error: () => {
         this.isLoading = false;
-        
-        // Fallback to default data
-        this.categories = [
-          'IT Support Services',
-          'Infrastructure Services',
-          'Enterprise Applications',
-          'Facilities Services',
-          'Internal Communications',
-          'Finance Services',
-          'Procurement Tools Services',
-          'Contact Center Inquiries',
-          'Vendor Management',
-          'Contracts'
-        ];
-        // Keep single service card even on error.
-        this.services = [this.singleServiceCard];
       }
     });
+  }
+
+  private applyCategories(lookups: LookupData, serviceList: ServiceSummary[]): void {
+    const fromApi = new Set(
+      serviceList
+        .map((s) => s.category)
+        .filter((c): c is string => typeof c === 'string' && c.length > 0)
+    );
+    if (fromApi.size > 0) {
+      this.categories = ['All', ...Array.from(fromApi).sort((a, b) => a.localeCompare(b))];
+      return;
+    }
+    if (lookups.categories?.length) {
+      this.categories = lookups.categories.map((cat) => cat.name);
+      return;
+    }
+    this.categories = [
+      'IT Support Services',
+      'Infrastructure Services',
+      'Enterprise Applications',
+      'Facilities Services',
+      'Internal Communications',
+      'Finance Services',
+      'Procurement Tools Services',
+      'Contact Center Inquiries',
+      'Vendor Management',
+      'Contracts'
+    ];
   }
 }
